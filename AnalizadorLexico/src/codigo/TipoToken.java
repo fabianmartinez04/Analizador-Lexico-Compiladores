@@ -9,7 +9,7 @@ package codigo;
  *
  * @author Fabian Martinez
  */
-public enum Tokens {
+public enum TipoToken {
     Reservadas,
     Igual,
     Suma,

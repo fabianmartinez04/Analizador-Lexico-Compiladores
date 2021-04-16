@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package codigo;
+import Estructuras.TablaSimbolos;
+import Estructuras.Token;
 import java.io.File;
 
 /**
@@ -12,8 +14,10 @@ import java.io.File;
  */
 public class Principal {
     public static void main(String[] args) {
-        String ruta = "C:/Users/Fabian Martinez/OneDrive/Escritorio/Analizador-Lexico-Compiladores/AnalizadorLexico/src/codigo/Lexer.flex";
+        String ruta = "C/Users/liset/OneDrive/Documentos/Ingeniería en Computación/Computación V Semestre/Compiladores e intérpretes/Proyectos/Scanner/AnalizadorLexico/src/codigo/Lexer.flex";
         generarLexer(ruta);
+  
+       
     }
     
     public static void generarLexer(String ruta){

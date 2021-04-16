@@ -5,6 +5,8 @@
  */
 package codigo;
 
+import Estructuras.TablaSimbolos;
+import Estructuras.Token;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,13 +23,14 @@ import javax.swing.JFileChooser;
  * @author Fabian Martinez
  */
 public class frmPrincipal extends javax.swing.JFrame {
-
+    TablaSimbolos tabla;
     /**
      * Creates new form frmPrincipal
      */
     public frmPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
+        tabla = new TablaSimbolos();
     }
 
     /**
@@ -89,31 +92,41 @@ public class frmPrincipal extends javax.swing.JFrame {
         try {
             Reader lector = new BufferedReader(new FileReader(chooser.getSelectedFile()));
             Lexer lexer = new Lexer(lector);
-            String resultado = "";
+            //String resultado = "";
+            int linea = 0;
             while (true) {
-                Tokens tokens = lexer.yylex();
+                TipoToken tokens = lexer.yylex();
+                linea++;
                 if (tokens == null) {
-                    resultado += "FIN";
-                    txtResultado.setText(resultado);
+                   // resultado += "FIN";
+                    txtResultado.setText(tabla.imprimirTablaSimbolos());
                     return;
                 }
-                switch (tokens) {
+                else{
+                Token token = new Token(String.valueOf(lexer.lexeme),tokens);
+               /* switch (token.tipo) {
                     case ERROR:
                         resultado += "Simbolo no definido\n";
                         break;
                     case Identificador: case Numero: case Reservadas:
-                        resultado += lexer.lexeme + ": Es un " + tokens + "\n";
+                        resultado += token.nombre + ": Es un " + token.tipo + "\n";
                         break;
                     default:
-                        resultado += "Token: " + tokens + "\n";
+                        resultado += "Token: " + token.tipo + "\n";
                         break;
+                }*/
+               
+                tabla.agregarToken(token, linea);
+                
                 }
             }
+           
         } catch (FileNotFoundException ex) {
             Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
     }//GEN-LAST:event_btnAnalizarActionPerformed
 
     /**
