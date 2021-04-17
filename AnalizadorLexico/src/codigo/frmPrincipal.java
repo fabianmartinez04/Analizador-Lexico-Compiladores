@@ -96,7 +96,8 @@ public class frmPrincipal extends javax.swing.JFrame {
             int linea = 0;
             while (true) {
                 TipoToken tokens = lexer.yylex();
-                linea++;
+                linea = lexer.row;
+                System.out.println("Token: " + lexer.lexeme + " Linea: " + lexer.row + " Columna: " + lexer.column + "\n");
                 if (tokens == null) {
                    // resultado += "FIN";
                     txtResultado.setText(tabla.imprimirTablaSimbolos());

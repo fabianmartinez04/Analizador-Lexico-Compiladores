@@ -10,13 +10,10 @@ package codigo;
  * @author Fabian Martinez
  */
 public enum TipoToken {
-    Reservadas,
-    Igual,
-    Suma,
-    Resta,
-    Multiplicacion,
-    Division,
-    Identificador,
-    Numero,
+    Keyword,
+    Identifier,
+    Number,
+    Operator,
+    Error,
     ERROR
 }
