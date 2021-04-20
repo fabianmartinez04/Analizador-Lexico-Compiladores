@@ -12,21 +12,46 @@ import static codigo.TipoToken.*;
     public Integer column;
 %}
 
-L=[a-zA-Z_]+
-DecDigit = [0-9]+
+L=[a-zA-Z_]
+DecDigit = [0-9]
 HexDigit = 0x [0-9A-Fa-f]+
 BinDigit = [0|1]+
 OctDigit = [0-7]+
-WhiteSpace = [ , \t, \r, \n]+
+WhiteSpace = [ ,\t,\r,\n]+
+Invalid = [ "ñ","Ñ","|","+","-",">","?","<","!","&","*","/","%","[","]","{","}",":",".","^","@","'","ê","«","¿","¡","Ü","╝","▐"]
 %%
 
 /*Regular expression*/
+
+
+/*Operators*/
+( "," | ";" | "++" | "--" | "==" | ">=" | ">" | "?" | "<=" | "<" | "!=" | "||" | "&&" | "!" | "=" | "+" | "-" | "*" | "/" | "%" | "(" | ")" | "[" | "]" | "{" | "}" | ":" | "." | "+=" | "-=" | "*=" | "/=" | "&" | "^" | "|" | ">>" | "<<" | "~" | "%=" | "&=" | "^=" | "|=" | "<<=" | ">>=" | "->" ) {lexeme = yytext(); row = yyline; column = yycolumn; return Operator;}
+
+
+/*LITERALS*/
+
+/*Strings*/
+(" {} ")
+
+/*Numbers*/
+/*Decimal number*/
+{DecDigit}+|("-"{DecDigit}+) {lexeme = yytext(); row = yyline; column = yycolumn; return Number;}
+/*Float number*/
+({DecDigit}+|"-"{DecDigit}+)"."{DecDigit}+ {lexeme = yytext(); row = yyline; column = yycolumn; return FloatNumber;}
+/*Hexa number*/
+
+/*Octal number*/
+
+
+/*ERROR*/
+//({Invalid}|{DecDigit})({L}|{DecDigit}|{Invalid})* {lexeme = yytext(); row = yyline; column = yycolumn; return Error;}
 
 /*White Space*/
 {WhiteSpace} {/*Ignore*/}
 
 /*Comments*/
 ("//") {/*Ignore*/}
+("/*"){L}*("*/") {/*Ignore*/}
 
 
 /*KeyWords*/
@@ -35,11 +60,8 @@ WhiteSpace = [ , \t, \r, \n]+
 /*Identifiers*/
 {L}({L}|{DecDigit})* {lexeme = yytext(); row = yyline; column = yycolumn; return Identifier;}
 
-/*Numbers*/
-{DecDigit}+|"-"{DecDigit}+ {lexeme = yytext(); row = yyline; column = yycolumn; return Number;}
 
-/*Operators*/
-( "," | ";" | "++" | "--" | "==" | ">=" | ">" | "?" | "<=" | "<" | "!=" | "||" | "&&" | "!" | "=" | "+" | "-" | "*" | "/" | "%" | "(" | ")" | "[" | "]" | "{" | "}" | ":" | "." | "+=" | "-=" | "*=" | "/=" | "&" | "^" | "|" | ">>" | "<<" | "~" | "%=" | "&=" | "^=" | "|=" | "<<=" | ">>=" | "->" ) {lexeme = yytext(); row = yyline; column = yycolumn; return Operator;}
+
 
 
 . {return ERROR;}
