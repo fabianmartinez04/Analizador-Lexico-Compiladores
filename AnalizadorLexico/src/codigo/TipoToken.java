@@ -16,6 +16,9 @@ public enum TipoToken {
     Operator,
     Error,
     FloatNumber,
+    HexadecimalNumber,
+    OctalNumber,
     LiteralString,
+    WhiteSpace,
     ERROR
 }

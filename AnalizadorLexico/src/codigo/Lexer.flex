@@ -18,40 +18,47 @@ HexDigit = 0x [0-9A-Fa-f]+
 BinDigit = [0|1]+
 OctDigit = [0-7]+
 WhiteSpace = [ ,\t,\r,\n]+
-Invalid = [ "ñ","Ñ","+","-",">","?","<","!","&","*","/","%","[","]","{","}",":",".","^","@","'","ê","«","¿","¡","Ü","╝",]
+Invalid = ["ç","Ç","ñ","Ñ",">","?","<","!","&","/","%","[","]","{","}",":","^","@","'","ê","«","¿","¡","Ü","╝"]
+Operators = [",",";","++","--","==",">=",">","?","<=","<","!=","||","&&","!","=","+","-","*","/","%","(",")","[","]","{","}",":",".","+=","-=","*=","/=","&","^","|",">>","<<","~","%=","&=","^=","|=","<<=",">>=","->"]
+KeyWords = ["auto","break","case","char","const","continue","default","do","double","else","enum","extern","float","for","goto","if","int","long","register","return","short","signed","sizeof","static","struct","switch","typedef","union","unsigned","void","volatile","while"]
+CommentMultiline = "/*" ~"*/"
+Comment = "//".*
 %%
 
 /*Regular expression*/
 
 
 /*Operators*/
-( "," | ";" | "++" | "--" | "==" | ">=" | ">" | "?" | "<=" | "<" | "!=" | "||" | "&&" | "!" | "=" | "+" | "-" | "*" | "/" | "%" | "(" | ")" | "[" | "]" | "{" | "}" | ":" | "." | "+=" | "-=" | "*=" | "/=" | "&" | "^" | "|" | ">>" | "<<" | "~" | "%=" | "&=" | "^=" | "|=" | "<<=" | ">>=" | "->" ) {lexeme = yytext(); row = yyline; column = yycolumn; return Operator;}
+{Operators} {lexeme = yytext(); row = yyline; column = yycolumn; return Operator;}
 
-
+/*Comments*/
+{Comment} {/*Ignore*/} 
+{CommentMultiline} {/* Ignore */}
 /*LITERALS*/
 
 /*Strings*/
-"\'"({L}|{DecDigit}|{Invalid})*"\'" {lexeme = yytext(); row = yyline; column = yycolumn; return LiteralString; }
+("\""({L}|{DecDigit}|{Invalid})*"\"") | ("\'"({L}|{DecDigit}|{Invalid})*"\'")  {lexeme = yytext(); row = yyline; column = yycolumn; return LiteralString; }
+
 
 /*Numbers*/
 /*Decimal number*/
 {DecDigit}+|("-"{DecDigit}+) {lexeme = yytext(); row = yyline; column = yycolumn; return Number;}
-/*Float number*/
-({DecDigit}+|"-"{DecDigit}+)"."{DecDigit}+ {lexeme = yytext(); row = yyline; column = yycolumn; return FloatNumber;}
-/*Hexa number*/
+
+/*Hexadecimal number*/
+{HexDigit} {lexeme = yytext(); row = yyline; column = yycolumn; return HexadecimalNumber;}
 
 /*Octal number*/
+{OctDigit} {lexeme = yytext(); row = yyline; column = yycolumn; return OctalNumber;}
 
+/*Float number*/
+({DecDigit}+|"-"{DecDigit}+)"."{DecDigit}+ {lexeme = yytext(); row = yyline; column = yycolumn; return FloatNumber;}
 
 /*ERROR*/
-({DecDigit}{L})({L}|{DecDigit}|{Invalid})* {lexeme = yytext(); row = yyline; column = yycolumn; return Error;}
+(({DecDigit}|{Invalid}{L})({L}|{DecDigit}|{Invalid})*)|({L}*{Invalid}+{DecDigit}*{L}*)* {lexeme = yytext(); row = yyline; column = yycolumn; return Error;}
 
 /*White Space*/
 {WhiteSpace} {/*Ignore*/}
 
-/*Comments*/
-("//") {/*Ignore*/}
-("/*"){L}*("*/") {/*Ignore*/}
 
 
 /*KeyWords*/

@@ -32,7 +32,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     public frmPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
-        tabla = new TablaSimbolos();
+       // tabla = new TablaSimbolos();
     }
 
     /**
@@ -128,6 +128,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             Lexer lexer = new Lexer(lector);
             //String resultado = "";
             int linea = 0;
+            tabla = new TablaSimbolos();
             while (true) {
                 TipoToken tokens = lexer.yylex();
                 linea = lexer.row;
@@ -136,6 +137,12 @@ public class frmPrincipal extends javax.swing.JFrame {
                    // resultado += "FIN";
                     DefaultTableModel tableModel = (DefaultTableModel)jtTokens.getModel();
                     ArrayList<String[]> t = tabla.getTokens();
+                    int rowCount = tableModel.getRowCount();
+                    //Remove rows one by one from the end of the table
+                    for (int i = rowCount - 1; i >= 0; i--) {
+                        tableModel.removeRow(i);
+                    }
+                    
                     for (int index = 0; index < t.size(); index++) {
                         tableModel.addRow(t.get(index));                        
                     }
