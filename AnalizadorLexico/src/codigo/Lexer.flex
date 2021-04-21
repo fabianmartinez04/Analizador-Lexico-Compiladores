@@ -18,7 +18,7 @@ HexDigit = 0x [0-9A-Fa-f]+
 BinDigit = [0|1]+
 OctDigit = [0-7]+
 WhiteSpace = [ ,\t,\r,\n]+
-Invalid = [ "ñ","Ñ","|","+","-",">","?","<","!","&","*","/","%","[","]","{","}",":",".","^","@","'","ê","«","¿","¡","Ü","╝","▐"]
+Invalid = [ "ñ","Ñ","+","-",">","?","<","!","&","*","/","%","[","]","{","}",":",".","^","@","'","ê","«","¿","¡","Ü","╝",]
 %%
 
 /*Regular expression*/
@@ -31,7 +31,7 @@ Invalid = [ "ñ","Ñ","|","+","-",">","?","<","!","&","*","/","%","[","]","{","}
 /*LITERALS*/
 
 /*Strings*/
-(" {} ")
+"\'"({L}|{DecDigit}|{Invalid})*"\'" {lexeme = yytext(); row = yyline; column = yycolumn; return LiteralString; }
 
 /*Numbers*/
 /*Decimal number*/
@@ -44,7 +44,7 @@ Invalid = [ "ñ","Ñ","|","+","-",">","?","<","!","&","*","/","%","[","]","{","}
 
 
 /*ERROR*/
-//({Invalid}|{DecDigit})({L}|{DecDigit}|{Invalid})* {lexeme = yytext(); row = yyline; column = yycolumn; return Error;}
+({DecDigit}{L})({L}|{DecDigit}|{Invalid})* {lexeme = yytext(); row = yyline; column = yycolumn; return Error;}
 
 /*White Space*/
 {WhiteSpace} {/*Ignore*/}
@@ -59,7 +59,6 @@ Invalid = [ "ñ","Ñ","|","+","-",">","?","<","!","&","*","/","%","[","]","{","}
 
 /*Identifiers*/
 {L}({L}|{DecDigit})* {lexeme = yytext(); row = yyline; column = yycolumn; return Identifier;}
-
 
 
 
