@@ -1,1 +1,6 @@
-99 casa if
+int main {
+char perro = bruno
+if (perro = "bruno"){
+float lola;
+lola := 1.05
+}
