@@ -50,7 +50,7 @@ public class TablaSimbolos {
                 else if (!lineasEncontradas.contains(linea)){
                     lineas +=String.valueOf(linea);
                 }
-                if(k!=tabla.get(llaves.get(i)).cantidadLineas()-1)
+                if(k <= tabla.get(llaves.get(i)).cantidadLineas()-1)
                     lineas+=",";
             
             }
