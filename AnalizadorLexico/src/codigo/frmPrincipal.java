@@ -25,14 +25,16 @@ import javax.swing.table.DefaultTableModel;
  * @author Fabian Martinez
  */
 public class frmPrincipal extends javax.swing.JFrame {
+
     TablaSimbolos tabla;
+
     /**
      * Creates new form frmPrincipal
      */
     public frmPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
-       // tabla = new TablaSimbolos();
+        // tabla = new TablaSimbolos();
     }
 
     /**
@@ -50,6 +52,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtTokens = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtextError = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Scanner");
@@ -97,20 +101,30 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jtTokens);
 
+        jtextError.setEditable(false);
+        jtextError.setColumns(20);
+        jtextError.setForeground(new java.awt.Color(255, 0, 0));
+        jtextError.setRows(5);
+        jScrollPane1.setViewportView(jtextError);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE))
                 .addGap(40, 40, 40))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -156,58 +170,51 @@ public class frmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
-        
+
         try {
             Reader lector = new BufferedReader(new FileReader(chooser.getSelectedFile()));
             Lexer lexer = new Lexer(lector);
             //String resultado = "";
             int linea = 0;
             tabla = new TablaSimbolos();
+            String error = "";
             while (true) {
                 TipoToken tokens = lexer.yylex();
                 linea = lexer.row;
                 System.out.println("Token: " + lexer.lexeme + " Linea: " + lexer.row + " Columna: " + lexer.column + "\n");
-                if (tokens == null) {
-                   // resultado += "FIN";
-                    DefaultTableModel tableModel = (DefaultTableModel)jtTokens.getModel();
-                    ArrayList<String[]> t = tabla.getTokens();
-                    int rowCount = tableModel.getRowCount();
-                    //Remove rows one by one from the end of the table
-                    for (int i = rowCount - 1; i >= 0; i--) {
-                        tableModel.removeRow(i);
+                if (tokens == TipoToken.Error || tokens == TipoToken.ERROR) {
+                    error += "Error: Token Invalido: " + lexer.lexeme + " en la linea: " + lexer.row + " columna: " + lexer.column + "\n";
+                    jtextError.setText(error);
+                } else {
+                    if (tokens == null) {
+                        // resultado += "FIN";
+                        DefaultTableModel tableModel = (DefaultTableModel) jtTokens.getModel();
+                        ArrayList<String[]> t = tabla.getTokens();
+                        int rowCount = tableModel.getRowCount();
+                        //Remove rows one by one from the end of the table
+                        for (int i = rowCount - 1; i >= 0; i--) {
+                            tableModel.removeRow(i);
+                        }
+
+                        for (int index = 0; index < t.size(); index++) {
+                            tableModel.addRow(t.get(index));
+                        }
+
+                        return;
+                    } else {
+                        Token token = new Token(String.valueOf(lexer.lexeme), tokens);
+                        tabla.agregarToken(token, linea);
+
                     }
-                    
-                    for (int index = 0; index < t.size(); index++) {
-                        tableModel.addRow(t.get(index));                        
-                    }
-                    
-                    return;
-                }
-                else{
-                Token token = new Token(String.valueOf(lexer.lexeme),tokens);
-               /* switch (token.tipo) {
-                    case ERROR:
-                        resultado += "Simbolo no definido\n";
-                        break;
-                    case Identificador: case Numero: case Reservadas:
-                        resultado += token.nombre + ": Es un " + token.tipo + "\n";
-                        break;
-                    default:
-                        resultado += "Token: " + token.tipo + "\n";
-                        break;
-                }*/
-               
-                tabla.agregarToken(token, linea);
-                
                 }
             }
-           
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-      
+
     }//GEN-LAST:event_btnAnalizarActionPerformed
 
     /**
@@ -249,8 +256,10 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnAnalizar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel jlTitle;
     private javax.swing.JTable jtTokens;
+    private javax.swing.JTextArea jtextError;
     // End of variables declaration//GEN-END:variables
 }
