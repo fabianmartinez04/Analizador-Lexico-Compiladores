@@ -181,6 +181,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             while (true) {
                 TipoToken tokens = lexer.yylex();
                 linea = lexer.row;
+                //System.out.println(linea);
                 System.out.println("Token: " + lexer.lexeme + " Linea: " + lexer.row + " Columna: " + lexer.column + "\n");
                 if (tokens == TipoToken.Error || tokens == TipoToken.ERROR) {
                     error += "Error: Token Invalido: " + lexer.lexeme + " en la linea: " + lexer.row + " columna: " + lexer.column + "\n";

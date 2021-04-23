@@ -1,6 +1,9 @@
-int main {
-char perro = bruno
-if (perro = "bruno"){
-float lola;
-lola := 1.05
+int num = 9;
+int var = 10.19;
+int a = 5;
+char fabian = 'Martinez';
+char pablo = 'a'; 
+if (a==5 ) {
+fabian = 'Valverde';
 }
+a=25;
