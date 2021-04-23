@@ -70,4 +70,4 @@ Comment = "//".*
 
 
 
-. {return ERROR;}
+. {lexeme = yytext(); row = yyline; column = yycolumn; return ERROR;}

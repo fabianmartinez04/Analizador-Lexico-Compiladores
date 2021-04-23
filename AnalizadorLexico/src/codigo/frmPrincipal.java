@@ -7,6 +7,7 @@ package codigo;
 
 import Estructuras.TablaSimbolos;
 import Estructuras.Token;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -184,11 +185,16 @@ public class frmPrincipal extends javax.swing.JFrame {
                 //System.out.println(linea);
                 System.out.println("Token: " + lexer.lexeme + " Linea: " + lexer.row + " Columna: " + lexer.column + "\n");
                 if (tokens == TipoToken.Error || tokens == TipoToken.ERROR) {
+                    jtextError.setForeground(Color.red);
                     error += "Error: Token Invalido: " + lexer.lexeme + " en la linea: " + lexer.row + " columna: " + lexer.column + "\n";
                     jtextError.setText(error);
                 } else {
                     if (tokens == null) {
                         // resultado += "FIN";
+                        if (error.equals("")) {
+                            jtextError.setForeground(Color.green);
+                            jtextError.setText("Análisis realizado con exito");
+                        }
                         DefaultTableModel tableModel = (DefaultTableModel) jtTokens.getModel();
                         ArrayList<String[]> t = tabla.getTokens();
                         int rowCount = tableModel.getRowCount();
