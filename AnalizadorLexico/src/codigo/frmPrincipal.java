@@ -209,8 +209,11 @@ public class frmPrincipal extends javax.swing.JFrame {
 
                         return;
                     } else {
-                        Token token = new Token(String.valueOf(lexer.lexeme), tokens);
-                        tabla.agregarToken(token, linea);
+                        if(tokens != TipoToken.Error && tokens!= TipoToken.ERROR){
+                            Token token = new Token(String.valueOf(lexer.lexeme), tokens);
+                            token.lineas.add(linea);
+                            tabla.agregarToken(token, linea);
+                        }
 
                     }
                 }
