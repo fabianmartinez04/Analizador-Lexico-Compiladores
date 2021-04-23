@@ -20,5 +20,6 @@ public enum TipoToken {
     OctalNumber,
     LiteralString,
     WhiteSpace,
+    PointFloatingNumber,
     ERROR
 }
