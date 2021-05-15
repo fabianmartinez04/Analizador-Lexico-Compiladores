@@ -15,10 +15,11 @@ import static codigo.TipoToken.*;
 L=[a-zA-Z_]
 Acentos  = [a-zA-ZÀ-ÿ]
 DecDigit = [0-9]
-HexDigit = 0x [0-9A-Fa-f]+
+HexDigit = (0|-0)(x|X)[0-9A-Fa-f]+
 BinDigit = [0|1]+
 OctDigit = 0[1-7]+
 WhiteSpace = [ \t\r\n]+
+BackSlash = [\\]
 Operators = ","|";"|"++"|"--"|"=="|">="|">"|"?"|"<="|"<"|"!="|"||"|"&&"|"!"|"="|"+"|"-"|"*"|"/"|"%"|"("|")"|"["|"]"|"{"|"}"|":"|"."|"+="|"-="|"*="|"/="|"&"|"^"|"|"|">>"|"<<"|"~"|"%="|"&="|"^="|"|="|"<<="|">>="|"->"
 Invalid = "ç"|"Ç"|"ñ"|"'"|"Ñ"|"&"|"/"|"%"|"^"|"@"|"'"|"ê"|"«"|"¿"|"¡"|"Ü"|"╝"|"á"|"é"|"í"|"ó"|"ú"|"Á"|"É"|"Í"|"Ó"|"Ú"
 KeyWords = "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
@@ -38,13 +39,13 @@ Comment = "//".*
 /*LITERALS*/
 
 /*Strings*/
-("\""({L}|{DecDigit}|{Invalid})*"\"") | ("\'"({L}|{DecDigit}|{Invalid})*"\'")  {lexeme = yytext(); row = yyline; column = yycolumn; return LiteralString; }
+("\""({BackSlash}|{L}|{DecDigit}|" "|"\t"|"\r"|{Invalid}|{Acentos})*"\"") | ("\'"({BackSlash}|{L}|{DecDigit}|" "|"\t"|"\r"|{Invalid}|{Acentos})*"\'")  {lexeme = yytext(); row = yyline; column = yycolumn; return LiteralString; }
 
 
 /*Numbers*/
 
 /*Flotante con exponente*/
-{DecDigit}+.{DecDigit}+e(-{DecDigit}+|{DecDigit}+) {lexeme = yytext(); row = yyline; column = yycolumn; return PointFloatingNumber;}
+{DecDigit}+.{DecDigit}+(e|E)(-{DecDigit}+|{DecDigit}+) {lexeme = yytext(); row = yyline; column = yycolumn; return PointFloatingNumber;}
 
 
 /*Octal number*/

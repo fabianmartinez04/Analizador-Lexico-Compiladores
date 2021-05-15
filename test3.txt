@@ -1,0 +1,17 @@
+int 2num= 9;
+int varñ = 10;
+int @var = 0;
+int Çvar = 19.9;
+int Çvarñ = 19.9;
+int 2varÑ = 19.9;
+int ñvar2 = 19.9;
+int variaññble= 10;
+int variable2 = 9;
+int varia2ble = 89;
+int 1 = 2;
+int ñ = 90;
+char fabian := "Martinez";
+char pablo = 'a';
+//Hola
+int a = 90;
+// jaja
