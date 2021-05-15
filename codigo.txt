@@ -1,9 +1,24 @@
-int num = 9;
-int var = 10.19;
-int a = 5;
-char fabian = 'Martinez';
+int num= 9;
+int var = 10;
+char malo = 2maloñ;
+/*
+char @var = 'hola';
+double Çvar = 19.9;
+double Çvarñ = 19.9;
+int ñvar2 = 19;
+*/
+int variaññble= 10;
+float variable2 = 999.33;
+int varia2ble = 89;
 char pablo = 'a'; 
-if (a==5 ) {
-fabian = 'Valverde';
+double a= @25;
+int i = 1;
+//while (i <= 5)
+//{
+//++i;
 }
-a=25;
+n = sizeof(d);
+n = sizeof(int);
+if (n != d){
+num='adios'
+}
